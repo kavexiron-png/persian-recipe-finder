@@ -1,0 +1,2 @@
+# Built exclusively with Python standard libraries (zero third-party dependencies required)
+# Python >= 3.9

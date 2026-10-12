@@ -1,0 +1,630 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>چی بپزم؟ | دستیار هوشمند آشپزی ایرانی بر اساس موجودی خانه</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --primary-light: #fff7ed;
+      --secondary: #10b981;
+      --secondary-light: #ecfdf5;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08);
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', Tahoma, 'Segoe UI', sans-serif; }
+    body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header { background: #ffffff; border-bottom: 1px solid var(--border); padding: 16px 24px; position: sticky; top: 0; z-index: 40; box-shadow: var(--shadow-sm); }
+    .header-inner { max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 44px; height: 44px; background: linear-gradient(135deg, #f97316, #fb923c); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
+    .brand-text h1 { font-size: 18px; font-weight: 800; color: #0f172a; }
+    .brand-text p { font-size: 12px; color: var(--text-muted); }
+    .demo-badge { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+
+    main { flex: 1; max-width: 1320px; width: 100%; margin: 24px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 28px; }
+
+    /* Pantry Selector Card */
+    .pantry-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 26px; box-shadow: var(--shadow-md); }
+    .pantry-header h2 { font-size: 20px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 8px; }
+    .pantry-header p { font-size: 13.5px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Quick Presets */
+    .presets-bar { display: flex; gap: 8px; margin: 16px 0 12px 0; flex-wrap: wrap; align-items: center; }
+    .preset-label { font-size: 12.5px; font-weight: 700; color: #475569; }
+    .preset-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+    .preset-btn:hover { background: #e2e8f0; color: var(--primary); }
+
+    /* Tabs & Search */
+    .pantry-filter-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .ing-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .ing-tab-btn { padding: 7px 16px; border-radius: 10px; border: 1px solid var(--border); background: #f8fafc; font-size: 12.5px; font-weight: 600; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .ing-tab-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .ing-search-box { position: relative; min-width: 220px; }
+    .ing-search-box input { width: 100%; padding: 8px 34px 8px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 12.5px; outline: none; }
+    .ing-search-box input:focus { border-color: var(--primary); }
+    .search-ico { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 13px; }
+
+    .ingredients-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; min-height: 80px; }
+    .ing-pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 12px; background: #f1f5f9; border: 1.5px solid transparent; color: #334155; font-size: 13.5px; font-weight: 600; cursor: pointer; user-select: none; transition: all 0.2s ease; }
+    .ing-pill:hover { background: #e2e8f0; transform: translateY(-1px); }
+    .ing-pill.selected { background: #ffedd5; border-color: var(--primary); color: #c2410c; font-weight: 700; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.15); }
+    .ing-pill .icon { font-size: 17px; }
+    .ing-pill .check { font-size: 12px; margin-right: 2px; }
+
+    .pantry-actions { display: flex; justify-content: space-between; align-items: center; padding-top: 18px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
+    .selected-summary { font-size: 13.5px; color: var(--text-muted); }
+    .selected-summary strong { color: var(--primary); font-weight: 800; }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3); }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+    .btn-outline:hover { background: #f1f5f9; color: var(--text-main); }
+
+    .results-section { display: flex; flex-direction: column; gap: 28px; }
+    .section-title { font-size: 18px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .badge-count { background: #fed7aa; color: #c2410c; font-size: 12px; padding: 2px 10px; border-radius: 20px; font-weight: 800; }
+
+    .recipes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+
+    .recipe-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: all 0.25s ease; cursor: pointer; }
+    .recipe-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+    .recipe-thumb { height: 180px; background: #f8fafc; display: flex; align-items: center; justify-content: center; font-size: 54px; position: relative; border-bottom: 1px solid #f1f5f9; }
+    .match-status-tag { position: absolute; top: 14px; right: 14px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; backdrop-filter: blur(8px); }
+    .match-full { background: rgba(16, 185, 129, 0.95); color: white; }
+    .match-partial { background: rgba(245, 158, 11, 0.95); color: white; }
+
+    .recipe-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+    .recipe-title { font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 8px; }
+    .recipe-meta { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; }
+    .meta-item { display: flex; align-items: center; gap: 4px; }
+
+    .ing-status-box { margin-top: auto; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; }
+    .available-tags, .missing-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .tag-avail { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 600; }
+    .tag-miss { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 3px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; padding: 20px; }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal { background: white; border-radius: 24px; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; }
+    .modal-hero { height: 180px; background: #ffedd5; display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; }
+    .modal-close { position: absolute; top: 16px; left: 16px; background: rgba(255, 255, 255, 0.9); border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; }
+    .modal-content { padding: 24px; }
+    .modal-title { font-size: 22px; font-weight: 800; color: #1e293b; margin-bottom: 6px; }
+    .modal-meta-bar { display: flex; gap: 16px; font-size: 13px; color: var(--text-muted); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .step-list, .ing-list { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; font-size: 13.5px; line-height: 1.7; color: #334155; }
+    .step-item { display: flex; gap: 12px; align-items: flex-start; }
+    .step-num { width: 24px; height: 24px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+
+    footer { margin-top: auto; background: white; border-top: 1px solid var(--border); padding: 20px; text-align: center; font-size: 13px; color: var(--text-muted); }
+    footer strong { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">🍳</div>
+        <div class="brand-text">
+          <h1>چی بپزم؟ | دستیار هوشمند آشپزی ایرانی</h1>
+          <p>پیشنهاد غذا بر اساس مواد موجود در یخچال و کابینت</p>
+        </div>
+      </div>
+      <div class="demo-badge">
+        پروپوزال و دموی تعاملی اختصاصی • kavexiron
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="pantry-card">
+      <div class="pantry-header">
+        <h2><span>🧊</span> مواد اولیه‌ای که در خانه دارید را انتخاب کنید:</h2>
+        <p>مواد اصلی موجود در یخچال یا کابینت را تیک بزنید؛ سیستم غذاهای ۱۰۰٪ آماده یا دارای ۱ و ۲ قلم کسری را تفکیک می‌کند.</p>
+      </div>
+
+      <div class="presets-bar">
+        <span class="preset-label">تست سریع ترکیب‌ها:</span>
+        <button class="preset-btn" onclick="applyPreset(['egg', 'tomato'])">🍳 املت (تخم‌مرغ + گوجه)</button>
+        <button class="preset-btn" onclick="applyPreset(['egg', 'potato', 'onion'])">🥞 کوکو (تخم‌مرغ + سیب‌زمینی + پیاز)</button>
+        <button class="preset-btn" onclick="applyPreset(['chicken', 'rice', 'onion', 'paste'])">🍗 زرشک‌پلو (مرغ + برنج + پیاز + رب)</button>
+        <button class="preset-btn" onclick="applyPreset(['rice', 'lentil', 'onion'])">🍛 عدس‌پلو (برنج + عدس + پیاز)</button>
+        <button class="preset-btn" onclick="applyPreset(['meat', 'potato', 'onion', 'egg'])">🥩 کتلت گوشت</button>
+      </div>
+
+      <div class="pantry-filter-row">
+        <div class="ing-tabs">
+          <button class="ing-tab-btn active" onclick="filterIngs('all', this)">همه مواد (۲۱ قلم)</button>
+          <button class="ing-tab-btn" onclick="filterIngs('protein', this)">🥩 گوشت و پروتئین</button>
+          <button class="ing-tab-btn" onclick="filterIngs('carb', this)">🌾 غلات و حبوبات</button>
+          <button class="ing-tab-btn" onclick="filterIngs('veg', this)">🥔 صیفی‌جات و سبزیجات</button>
+          <button class="ing-tab-btn" onclick="filterIngs('dairy_staple', this)">🥛 لبنیات و چاشنی</button>
+        </div>
+
+        <div class="ing-search-box">
+          <span class="search-ico">🔍</span>
+          <input type="text" id="ingSearchInput" placeholder="جستجوی سریع ماده اولیه..." oninput="onSearchIng()">
+        </div>
+      </div>
+
+      <div class="ingredients-grid" id="ingredientsList"></div>
+
+      <div class="pantry-actions">
+        <div class="selected-summary">
+          تعداد مواد انتخاب‌شده: <strong id="selectedCount">۰</strong> قلم
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-outline" onclick="clearSelection()">پاک کردن همه</button>
+          <button class="btn btn-primary" onclick="scrollResults()">
+            <span>🔍</span> مشاهده غذاهای پیشنهادی
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-section" id="resultsSection">
+      <div>
+        <div class="section-title">
+          <span>✅</span> غذاهای آماده طبخ (تمام مواد اصلی موجود است)
+          <span class="badge-count" id="countFullMatch">۰</span>
+        </div>
+        <div class="recipes-grid" id="fullMatchGrid"></div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div class="section-title">
+          <span>🛒</span> غذاهایی که فقط به ۱ یا ۲ قلم ماده دیگر نیاز دارند
+          <span class="badge-count" style="background:#fef08a; color:#854d0e;" id="countPartialMatch">۰</span>
+        </div>
+        <div class="recipes-grid" id="partialMatchGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="recipeModal" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-hero" id="modalEmoji">🥘
+        <button class="modal-close" onclick="closeModalDirect()">&times;</button>
+      </div>
+      <div class="modal-content">
+        <h2 class="modal-title" id="modalTitle">نام غذا</h2>
+        <div class="modal-meta-bar" id="modalMeta"></div>
+        <h3 style="font-size:16px; font-weight:800; margin-bottom:10px;">🛒 مواد لازم و مقادیر دقیق:</h3>
+        <div class="ing-list" id="modalIngredients"></div>
+        <h3 style="font-size:16px; font-weight:800; margin-top:24px; margin-bottom:10px;">👩‍🍳 مراحل پخت گام‌به‌گام:</h3>
+        <div class="step-list" id="modalSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    توسعه داده شده با پایتون و معماری مستقل وب‌اپلیکیشن توسط <strong>kavexiron</strong>
+  </footer>
+
+  <script>
+    // 21 Common Iranian Kitchen Ingredients
+    const ingredients = [
+      { id: "egg", name: "تخم‌مرغ", icon: "🥚", cat: "protein" },
+      { id: "chicken", name: "مرغ", icon: "🍗", cat: "protein" },
+      { id: "meat", name: "گوشت قرمز / چرخ‌کرده", icon: "🥩", cat: "protein" },
+      
+      { id: "potato", name: "سیب‌زمینی", icon: "🥔", cat: "veg" },
+      { id: "onion", name: "پیاز", icon: "🧅", cat: "veg" },
+      { id: "tomato", name: "گوجه‌فرنگی", icon: "🍅", cat: "veg" },
+      { id: "eggplant", name: "بادمجان", icon: "🍆", cat: "veg" },
+      { id: "zucchini", name: "کدو سبز", icon: "🥒", cat: "veg" },
+      { id: "mushroom", name: "قارچ", icon: "🍄", cat: "veg" },
+      { id: "garlic", name: "سیر", icon: "🧄", cat: "veg" },
+      { id: "ghormeh_sabzi", name: "سبزی قورمه", icon: "🥬", cat: "veg" },
+
+      { id: "rice", name: "برنج", icon: "🍚", cat: "carb" },
+      { id: "bread", name: "نان", icon: "🥖", cat: "carb" },
+      { id: "lentil", name: "عدس", icon: "🥣", cat: "carb" },
+      { id: "splitpea", name: "لپه", icon: "🫘", cat: "carb" },
+      { id: "beans", name: "لوبیا قرمز / چیتی", icon: "🫘", cat: "carb" },
+      { id: "barley", name: "جو پرک", icon: "🌾", cat: "carb" },
+      { id: "walnut", name: "گردو", icon: "🌰", cat: "carb" },
+
+      { id: "paste", name: "رب گوجه‌فرنگی", icon: "🥫", cat: "dairy_staple" },
+      { id: "pomegranate_paste", name: "رب انار", icon: "🍯", cat: "dairy_staple" },
+      { id: "kashk", name: "کشک", icon: "🥛", cat: "dairy_staple" },
+      { id: "yogurt", name: "ماست", icon: "🥣", cat: "dairy_staple" }
+    ];
+
+    // Recipes: Requirements are strictly the distinctive core items (oil/salt/spices are assumed available in every home)
+    const recipes = [
+      {
+        id: "omlet",
+        title: "املت گوجه‌فرنگی قهوه‌خانه‌ای",
+        emoji: "🍳",
+        time: "۱۵ دقیقه",
+        servings: "۲ نفر",
+        difficulty: "خیلی آسان",
+        req: ["egg", "tomato"],
+        quantities: ["تخم‌مرغ: ۳ عدد", "گوجه‌فرنگی رنده‌شده: ۳ عدد", "نمک و زردچوبه و روغن: به مقدار لازم"],
+        steps: ["گوجه‌ها را در تابه تفت دهید تا آب آن کاملاً کشیده شود.", "تخم‌مرغ‌ها را روی گوجه شکسته و هم نزنید تا خودش را بگیرد.", "با نان تازه سرو کنید."]
+      },
+      {
+        id: "kuku_sibzamini",
+        title: "کوکو سیب‌زمینی برشته",
+        emoji: "🥞",
+        time: "۳۰ دقیقه",
+        servings: "۳ نفر",
+        difficulty: "آسان",
+        req: ["egg", "potato", "onion"],
+        quantities: ["سیب‌زمینی آبپز: ۳ عدد", "تخم‌مرغ: ۲ عدد", "پیاز رنده شده: ۱ عدد", "ادویه و نمک: به مقدار لازم"],
+        steps: ["سیب‌زمینی و پیاز رنده شده را با تخم‌مرغ و ادویه مخلوط کنید.", "مایه را در روغن داغ سرخ کنید تا دو طرف آن طلایی شود."]
+      },
+      {
+        id: "zereshk_polo",
+        title: "زرشک پلو با مرغ مجلسی",
+        emoji: "🍗",
+        time: "۱ ساعت",
+        servings: "۴ نفر",
+        difficulty: "متوسط",
+        req: ["chicken", "rice", "onion", "paste"],
+        quantities: ["مرغ: ۴ تکه", "برنج: ۳ پیمانه", "پیاز: ۲ عدد", "رب گوجه: ۲ قاشق", "زعفران و روغن: به مقدار لازم"],
+        steps: ["مرغ را با پیاز و ادویه تفت دهید و با سس رب بگذارید جا بیفتد.", "برنج را آبکش و دم کنید و با زرشک سرو کنید."]
+      },
+      {
+        id: "adas_polo",
+        title: "عدس پلو اصیل ایرانی",
+        emoji: "🍛",
+        time: "۵۰ دقیقه",
+        servings: "۴ نفر",
+        difficulty: "آسان",
+        req: ["rice", "lentil", "onion"],
+        quantities: ["برنج: ۳ پیمانه", "عدس پخته: ۱.۵ پیمانه", "پیاز داغ: ۱ پیمانه", "روغن و دارچین: کافی"],
+        steps: ["عدس را پخته و با برنج آبکش شده مخلوط کنید.", "کمی دارچین زده و دم بگذارید."]
+      },
+      {
+        id: "estamboli",
+        title: "استانبولی پلو با سیب‌زمینی",
+        emoji: "🥘",
+        time: "۴۵ دقیقه",
+        servings: "۳ نفر",
+        difficulty: "آسان",
+        req: ["rice", "potato", "onion", "paste"],
+        quantities: ["برنج: ۲.۵ پیمانه", "سیب‌زمینی نگینی: ۲ عدد", "پیاز: ۱ عدد", "رب گوجه: ۲ قاشق"],
+        steps: ["سیب‌زمینی و پیاز را تفت دهید و رب اضافه کنید.", "برنج کته را با مایه مخلوط کرده و دم کنید."]
+      },
+      {
+        id: "khorak_morgh",
+        title: "خوراک مرغ و سیب‌زمینی",
+        emoji: "🍲",
+        time: "۴۰ دقیقه",
+        servings: "۳ نفر",
+        difficulty: "آسان",
+        req: ["chicken", "potato", "onion", "paste"],
+        quantities: ["سینه مرغ: ۳۵۰ گرم", "سیب‌زمینی: ۲ عدد", "پیاز: ۱ عدد", "رب گوجه: ۱.۵ قاشق"],
+        steps: ["تکه‌های مرغ را با پیاز تفت دهید.", "سیب‌زمینی و رب و آب اضافه کنید تا غلیظ شود."]
+      },
+      {
+        id: "kashk_bademjan",
+        title: "کشک بادمجان سنتی",
+        emoji: "🍆",
+        time: "۳۵ دقیقه",
+        servings: "۳ نفر",
+        difficulty: "آسان",
+        req: ["eggplant", "kashk", "onion", "garlic"],
+        quantities: ["بادمجان: ۴ عدد", "کشک غلیظ: نصف پیمانه", "پیاز: ۲ عدد", "سیر: ۳ حبه"],
+        steps: ["بادمجان‌ها را سرخ کرده و بکوبید.", "سیرداغ و پیازداغ را اضافه کرده و کشک را ریخته و ۱۰ دقیقه حرارت دهید."]
+      },
+      {
+        id: "mirza_ghasemi",
+        title: "میرزاقاسمی گیلانی",
+        emoji: "🍅",
+        time: "۳۰ دقیقه",
+        servings: "۲ نفر",
+        difficulty: "آسان",
+        req: ["eggplant", "tomato", "garlic", "egg"],
+        quantities: ["بادمجان کبابی: ۳ عدد", "گوجه‌فرنگی رنده شده: ۳ عدد", "سیر: ۴ حبه", "تخم‌مرغ: ۲ عدد"],
+        steps: ["سیرداغ بگیرید و گوجه را اضافه کنید تا غلیظ شود.", "بادمجان ساطوری را افزوده و تخم‌مرغ‌ها را روی آن بشکنید."]
+      },
+      {
+        id: "kotlet",
+        title: "کتلت گوشت و سیب‌زمینی",
+        emoji: "🥩",
+        time: "۴۰ دقیقه",
+        servings: "۴ نفر",
+        difficulty: "آسان",
+        req: ["meat", "potato", "onion", "egg"],
+        quantities: ["گوشت چرخ‌کرده: ۳۰۰ گرم", "سیب‌زمینی خام رنده‌شده: ۲ عدد", "پیاز: ۱ عدد", "تخم‌مرغ: ۱ عدد"],
+        steps: ["آب پیاز و سیب‌زمینی را بگیرید.", "با گوشت و تخم‌مرغ ورز دهید و در روغن سرخ کنید."]
+      },
+      {
+        id: "gheimeh",
+        title: "خورش قیمه سیب‌زمینی",
+        emoji: "🍛",
+        time: "۲ ساعت",
+        servings: "۴ نفر",
+        difficulty: "متوسط",
+        req: ["meat", "splitpea", "potato", "onion", "paste"],
+        quantities: ["گوشت خورشتی: ۳۰۰ گرم", "لپه خیس‌خورده: ۱ پیمانه", "سیب‌زمینی خلالی: ۲ عدد", "رب گوجه: ۲ قاشق"],
+        steps: ["پیاز، گوشت و لپه را تفت دهید و رب گوجه بزنید.", "آب اضافه کرده تا آرام بپزد و با سیب‌زمینی سرخ‌شده سرو کنید."]
+      },
+      {
+        id: "ghormeh_sabzi_dish",
+        title: "خورش قورمه سبزی جاافتاده",
+        emoji: "🍲",
+        time: "۳ ساعت",
+        servings: "۵ نفر",
+        difficulty: "مجلسی",
+        req: ["meat", "ghormeh_sabzi", "beans", "onion"],
+        quantities: ["گوشت گوسفندی: ۴۰۰ گرم", "سبزی قورمه سرخ‌شده: ۴۰۰ گرم", "لوبیا: ۱ پیمانه", "پیاز: ۱ عدد"],
+        steps: ["گوشت و پیاز را تفت دهید و لوبیا و آب اضافه کنید.", "سبزی سرخ‌شده را ریخته و بگذارید با شعله بسیار ملایم به روغن بیفتد."]
+      },
+      {
+        id: "loubia_polo",
+        title: "لوبیا پلو با گوشت چرخ‌کرده",
+        emoji: "🍚",
+        time: "۱ ساعت",
+        servings: "۴ نفر",
+        difficulty: "متوسط",
+        req: ["rice", "meat", "onion", "paste"],
+        quantities: ["برنج: ۳ پیمانه", "گوشت چرخ‌کرده: ۳۰۰ گرم", "پیاز: ۱ عدد", "رب گوجه: ۲ قاشق", "دارچین"],
+        steps: ["مایه گوشتی را با پیاز و رب و دارچین آماده کنید.", "برنج را آبکش کرده، لایه‌لایه با مایه مخلوط و دم بگذارید."]
+      },
+      {
+        id: "fesenjan",
+        title: "خورش فسنجان با مرغ",
+        emoji: "🥣",
+        time: "۲.۵ ساعت",
+        servings: "۴ نفر",
+        difficulty: "مجلسی",
+        req: ["chicken", "walnut", "onion", "pomegranate_paste"],
+        quantities: ["مرغ: ۴ تکه", "گردو آسیاب‌شده: ۳۰۰ گرم", "رب انار: نصف پیمانه", "پیاز: ۱ عدد"],
+        steps: ["گردو را با آب سرد بار بگذارید تا به روغن بیفتد.", "رب انار و تکه‌های مرغ تفت‌داده را اضافه کرده و بگذارید جا بیفتد."]
+      },
+      {
+        id: "tahchin",
+        title: "ته‌چین مرغ زعفرانی",
+        emoji: "🥧",
+        time: "۱.۵ ساعت",
+        servings: "۴ نفر",
+        difficulty: "متوسط",
+        req: ["rice", "chicken", "yogurt", "egg"],
+        quantities: ["برنج: ۳ پیمانه", "سینه مرغ پخته: ۳۰۰ گرم", "ماست چکیده: ۱ پیمانه", "زرده تخم‌مرغ: ۲ عدد"],
+        steps: ["برنج را آبکش کنید و با ماست، زرده تخم‌مرغ و زعفران مخلوط کنید.", "لایه‌ای از برنج، سپس مرغ ریش‌شده و دوباره برنج ریخته و دم بگذارید."]
+      },
+      {
+        id: "soup_jo",
+        title: "سوپ جو پرک با مرغ",
+        emoji: "🍲",
+        time: "۴۵ دقیقه",
+        servings: "۴ نفر",
+        difficulty: "آسان",
+        req: ["chicken", "barley", "onion", "paste"],
+        quantities: ["سینه مرغ: ۲۰۰ گرم", "جو پرک: ۱ پیمانه", "پیاز: ۱ عدد", "رب گوجه: ۱ قاشق"],
+        steps: ["مرغ و پیاز و جو پرک را با آب بگذارید تا لعاب بیندازد.", "رب گوجه را تفت داده و در انتها اضافه کنید تا جا بیفتد."]
+      },
+      {
+        id: "eshkaneh",
+        title: "اشکنه پیاز و تخم‌مرغ سنتی",
+        emoji: "🥣",
+        time: "۲۰ دقیقه",
+        servings: "۲ نفر",
+        difficulty: "خیلی آسان",
+        req: ["egg", "onion", "paste"],
+        quantities: ["پیاز: ۲ عدد", "تخم‌مرغ: ۲ عدد", "رب گوجه‌فرنگی: ۱ قاشق", "زردچوبه و شنبلیله"],
+        steps: ["پیاز داغ فراوان درست کرده و رب را تفت دهید.", "آب جوش اضافه کنید و در پایان تخم‌مرغ‌ها را بشکنید."]
+      },
+      {
+        id: "yatimcheh",
+        title: "یتیمچه بادمجان و کدو",
+        emoji: "🍆",
+        time: "۳۵ دقیقه",
+        servings: "۳ نفر",
+        difficulty: "آسان",
+        req: ["eggplant", "tomato", "onion"],
+        quantities: ["بادمجان: ۳ عدد", "گوجه‌فرنگی: ۳ عدد", "پیاز: ۲ عدد"],
+        steps: ["پیاز را تفت دهید و بادمجان و گوجه خردشده را اضافه کنید.", "درب قابلمه را بگذارید تا با آب گوجه پخته شود."]
+      }
+    ];
+
+    // State
+    let selectedIngs = new Set(["egg", "tomato"]); // Default: Omlet matches 100%!
+    let currentCategory = "all";
+    let searchQuery = "";
+
+    function renderIngredients() {
+      const container = document.getElementById("ingredientsList");
+      container.innerHTML = "";
+
+      const filtered = ingredients.filter(ing => {
+        const matchesCat = (currentCategory === "all") || (ing.cat === currentCategory);
+        const matchesSearch = !searchQuery || ing.name.includes(searchQuery);
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:10px;">ماده‌ای با این نام یافت نشد.</p>`;
+        return;
+      }
+
+      filtered.forEach(ing => {
+        const isSel = selectedIngs.has(ing.id);
+        const pill = document.createElement("div");
+        pill.className = `ing-pill ${isSel ? "selected" : ""}`;
+        pill.innerHTML = `
+          <span class="icon">${ing.icon}</span>
+          <span>${ing.name}</span>
+          ${isSel ? '<span class="check">✓</span>' : ''}
+        `;
+        pill.onclick = () => toggleIngredient(ing.id);
+        container.appendChild(pill);
+      });
+
+      document.getElementById("selectedCount").innerText = selectedIngs.size;
+    }
+
+    function toggleIngredient(id) {
+      if (selectedIngs.has(id)) {
+        selectedIngs.delete(id);
+      } else {
+        selectedIngs.add(id);
+      }
+      renderIngredients();
+      calculateMatches();
+    }
+
+    function applyPreset(ids) {
+      selectedIngs = new Set(ids);
+      renderIngredients();
+      calculateMatches();
+    }
+
+    function clearSelection() {
+      selectedIngs.clear();
+      renderIngredients();
+      calculateMatches();
+    }
+
+    function filterIngs(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll(".ing-tab-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      renderIngredients();
+    }
+
+    function onSearchIng() {
+      searchQuery = document.getElementById("ingSearchInput").value.trim();
+      renderIngredients();
+    }
+
+    function calculateMatches() {
+      const fullMatches = [];
+      const partialMatches = [];
+
+      recipes.forEach(r => {
+        const reqList = r.req;
+        const available = reqList.filter(id => selectedIngs.has(id));
+        const missing = reqList.filter(id => !selectedIngs.has(id));
+
+        if (missing.length === 0) {
+          fullMatches.push({ ...r, available, missing });
+        } else if (missing.length <= 2 && available.length > 0) {
+          partialMatches.push({ ...r, available, missing });
+        }
+      });
+
+      document.getElementById("countFullMatch").innerText = fullMatches.length;
+      document.getElementById("countPartialMatch").innerText = partialMatches.length;
+
+      const fullGrid = document.getElementById("fullMatchGrid");
+      fullGrid.innerHTML = "";
+      if (fullMatches.length === 0) {
+        fullGrid.innerHTML = `<div style="grid-column:1/-1; padding:24px; text-align:center; color:var(--text-muted); background:#ffffff; border-radius:14px; border:1px dashed var(--border);">با این مواد، غذایی با ۱۰۰٪ تطابق یافت نشد. بخش غذاهای دارای ۱ یا ۲ کسری در زیر را بررسی کنید یا مواد بیشتری را تیک بزنید.</div>`;
+      } else {
+        fullMatches.forEach(r => fullGrid.appendChild(createRecipeCard(r, true)));
+      }
+
+      const partialGrid = document.getElementById("partialMatchGrid");
+      partialGrid.innerHTML = "";
+      if (partialMatches.length === 0) {
+        partialGrid.innerHTML = `<div style="grid-column:1/-1; padding:24px; text-align:center; color:var(--text-muted); background:#ffffff; border-radius:14px; border:1px dashed var(--border);">غذاهای دارای ۱ یا ۲ کسری یافت نشد.</div>`;
+      } else {
+        partialMatches.forEach(r => partialGrid.appendChild(createRecipeCard(r, false)));
+      }
+    }
+
+    function createRecipeCard(r, isFull) {
+      const card = document.createElement("div");
+      card.className = "recipe-card";
+      card.onclick = () => openModal(r);
+
+      const availBadges = r.available.map(id => {
+        const ing = ingredients.find(x => x.id === id);
+        return `<span class="tag-avail">✓ ${ing ? ing.name : id}</span>`;
+      }).join("");
+
+      const missBadges = r.missing.map(id => {
+        const ing = ingredients.find(x => x.id === id);
+        return `<span class="tag-miss">✕ کسری: ${ing ? ing.name : id}</span>`;
+      }).join("");
+
+      card.innerHTML = `
+        <div class="recipe-thumb">
+          ${r.emoji}
+          <div class="match-status-tag ${isFull ? 'match-full' : 'match-partial'}">
+            ${isFull ? 'آماده پخت (۱۰۰٪ موجود)' : `نیاز به ${r.missing.length} قلم دیگر`}
+          </div>
+        </div>
+        <div class="recipe-body">
+          <h3 class="recipe-title">${r.title}</h3>
+          <div class="recipe-meta">
+            <span class="meta-item">⏱ ${r.time}</span>
+            <span class="meta-item">👥 ${r.servings}</span>
+            <span class="meta-item">📊 ${r.difficulty}</span>
+          </div>
+          <div class="ing-status-box">
+            <div class="available-tags">${availBadges}</div>
+            ${missBadges ? `<div class="missing-tags">${missBadges}</div>` : ''}
+          </div>
+        </div>
+      `;
+      return card;
+    }
+
+    function openModal(r) {
+      document.getElementById("modalEmoji").innerText = r.emoji;
+      document.getElementById("modalTitle").innerText = r.title;
+      document.getElementById("modalMeta").innerHTML = `
+        <span>⏱ زمان پخت: ${r.time}</span>
+        <span>👥 تعداد: ${r.servings}</span>
+        <span>📊 درجه سختی: ${r.difficulty}</span>
+      `;
+
+      const ingList = document.getElementById("modalIngredients");
+      ingList.innerHTML = r.quantities.map(q => `<div>• ${q}</div>`).join("");
+
+      const stepsList = document.getElementById("modalSteps");
+      stepsList.innerHTML = r.steps.map((st, i) => `
+        <div class="step-item">
+          <div class="step-num">${i + 1}</div>
+          <div>${st}</div>
+        </div>
+      `).join("");
+
+      document.getElementById("recipeModal").classList.add("active");
+    }
+
+    function closeModal(e) {
+      if (e.target.id === "recipeModal") document.getElementById("recipeModal").classList.remove("active");
+    }
+
+    function closeModalDirect() {
+      document.getElementById("recipeModal").classList.remove("active");
+    }
+
+    function scrollResults() {
+      document.getElementById("resultsSection").scrollIntoView({ behavior: "smooth" });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      renderIngredients();
+      calculateMatches();
+    });
+  </script>
+</body>
+</html>
